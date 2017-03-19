@@ -1,0 +1,42 @@
+{
+  "name": "hacker-buddy",
+  "version": "1.0.0",
+  "title": "Hacker Buddy",
+  "description": "A Hacking Companion",
+  "tags": [
+    {
+      "label": "arduino",
+      "type": "platform"
+    },
+    {
+      "label": "ble",
+      "type": "comm"
+    }
+  ],
+  "libraries": [
+    {
+      "name": "jquery",
+      "version": "2.1.1"
+    },
+    {
+      "name": "mdl",
+      "version": "1.2.1"
+    }
+  ],
+  "plugins": [
+    {
+      "name": "cordova-plugin-ble",
+      "version": "2.0.0"
+    }
+  ],
+  "index-file": "index.html",
+  "app-dir": "app",
+  "uuid": "34f5862e-dde4-44ea-8147-c9911834de06",
+  "icon": "app-icon.png",
+  "doc-url": "http://evothings.com/2.2/doc/examples/arduino101-led-onoff.html",
+  "long-description": "A simple app that connects to a BLE enabled car that helps you hack.",
+  "cordova-id": "com.hackerbuddy.car",
+  "author-name": "Syed Ahmed",
+  "author-email": "isyed.ahmed@hotmail.com",
+  "author-url": "http://syedahmed.io"
+}

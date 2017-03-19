@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<!--
+This is an app that demonstrates how to control an Arduino101 board
+using BLE (Bluetooth Low Energy).
+-->
+<head>
+
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no
+		initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+
+	<title>Hacker Buddy!</title>
+
+	<style>
+		@import 'ui/css/evothings-app.css';
+	</style>
+
+	<script>
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	window.onerror = function(msg, url, line)
+	{
+		console.log(msg + ": " + url + ":" + line);
+	};
+	</script>
+
+	<script src="cordova.js"></script>
+	<script src="libs/jquery/jquery.js"></script>
+	<script src="libs/evothings/evothings.js"></script>
+	<script src="libs/evothings/ui/ui.js"></script>
+	<script src="libs/evothings/arduinoble/arduinoble.js"></script>
+
+
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.deep_purple-amber.min.css" />
+  <link rel="stylesheet" href="libs/mdl/icons/material-icons.css">
+
+	<style media="screen">
+
+	.btn{
+		width: 60%;
+		height: 50px;
+		align-items: center;
+		text-align: center;
+	}
+
+	.mdl-button {
+		width: 60%;
+		height: 50px;
+		align-items: center;
+		text-align: center;
+	}
+
+	.center-align {
+		text-align: center
+	}
+
+	.logo {
+		height: 140px;
+		width: 50%;
+		align-items: center;
+		text-align: center;
+	}
+
+	body {
+		background-image: url("beans.jpg");
+	}
+
+	</style>
+</head>
+
+<body background="beans.jpg" ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
+
+	<header>
+		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
+	</header>
+		<center>
+		<img class="logo" src="hackerbuddy.png" align="middle"></img>
+		</center>
+
+	<p class = "center-align" id="info">Initializing...</p>
+
+	<div class="center-align">
+		<button class="btn mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onclick="app.connect()">
+		  CONNECT
+		</button>
+	</div>
+
+	<br>
+
+	<div class="center-align">
+		<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onclick="app.ledOn()">
+			LED ON
+		</button>
+	</div>
+
+	<br>
+
+	<div class="center-align">
+		<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onclick="app.OffBuddy()">
+			LED OFF
+		</button>
+	</div>
+
+	<script>
+	// Application object.
+	var app = {}
+	var click = 0;
+
+	// Connected device.
+	app.device = null;
+
+	// Turn on LED.
+	app.ledOn = function()
+	{
+		if (click % 2 == 0){
+			app.device && app.device.writeDataArray(new Uint8Array([1]), '19b10001-e8f2-537e-4f6c-d104768a1214');
+			click
+		}else{
+			app.device && app.device.writeDataArray(new Uint8Array([0]), '19b10001-e8f2-537e-4f6c-d104768a1214');
+			click
+		}
+		click += 1;
+	}
+
+	// Turn off LED.
+	app.OffBuddy = function()
+	{
+		app.device && app.device.writeDataArray(new Uint8Array([2]), '19b10001-e8f2-537e-4f6c-d104768a1214');
+	}
+
+	app.showMessage = function(info)
+	{
+		document.getElementById('info').innerHTML = info
+	};
+
+	// Called when BLE and other native functions are available.
+	app.onDeviceReady = function()
+	{
+		app.showMessage('Touch the connect button to begin.');
+	};
+
+	app.connect = function()
+	{
+		evothings.arduinoble.close();
+
+		app.showMessage('Connecting...');
+
+		evothings.arduinoble.connect(
+			'LED', // Advertised name of BLE device.
+			function(device)
+			{
+				app.device = device;
+				app.showMessage('Your hacker buddy is connect!');
+			},
+			function(errorCode)
+			{
+				app.showMessage('Connect error: ' + errorCode + '.');
+			});
+	};
+
+	document.addEventListener(
+		'deviceready',
+		function() { evothings.scriptsLoaded(app.onDeviceReady) },
+		false);
+	</script>
+
+
+  <script src="libs/mdl/material.js"></script>
+</body>
+
+</html>
